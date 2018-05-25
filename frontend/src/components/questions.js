@@ -1,10 +1,11 @@
 import React from 'react';
+import RecordView from './record_view'
 
 class Questions extends React.Component {
 
   state = {
     questions: [],
-    current_question: {},
+    current_question: {content: "Press enter to start"},
     timer: 0,
     interval: null,
   }
@@ -17,7 +18,6 @@ class Questions extends React.Component {
       .then(api_questions => {
         this.setState({
           questions: api_questions,
-          current_question: {content: "Press enter to start"}
         })
       })
 
@@ -66,7 +66,8 @@ class Questions extends React.Component {
     return(
       <div>
         <p>{this.state.current_question.content}</p>
-        <p>{this.state.timer}</p>
+        <p>{this.state.current_question.content === "Press enter to start" ? null : this.state.timer}</p>
+        <p>{this.state.current_question.content === "Press enter to start" ? null : <RecordView />}</p>
       </div>
     )
   }
