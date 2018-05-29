@@ -12,6 +12,7 @@ class Questions extends React.Component {
 
   componentDidMount() {
 
+
     // fetch the data to display questions
     fetch('http://localhost:5000/api/v1/questions')
       .then(response => response.json())
@@ -24,13 +25,26 @@ class Questions extends React.Component {
     // listen for key events
     document.addEventListener('keyup', (e) => {
       if (e.key === " " || e.key === "Enter" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
-        console.log(e)
-        console.log(this.state.current_question.content)
+        //console.log(e)
+        //console.log(this.state.current_question.content)
         this.refreshQuestion()
       } else {
-        console.log("Not a key I want to track");
+        //console.log("Not a key I want to track");
       }
     })
+
+
+  }
+
+  sayQuestion = () => {
+    let voices = window.speechSynthesis.getVoices()
+    speechSynthesis.cancel()
+    let msg = new SpeechSynthesisUtterance()
+    msg.text = this.state.current_question.content;
+    // window.speechSynthesis.onvoiceschanged = function() {
+    // }
+    msg.voice = voices.find(voice => voice.name === "Google UK English Male")
+    speechSynthesis.speak(msg)
   }
 
   refreshQuestion = () => {
@@ -39,6 +53,7 @@ class Questions extends React.Component {
         current_question: this.state.questions[Math.floor(Math.random()*this.state.questions.length)]
       })
       this.startTimer()
+      this.sayQuestion()
     } else {}
   }
 
@@ -62,12 +77,12 @@ class Questions extends React.Component {
   }
 
   render(){
-    console.log(this.state);
+    //console.log(this.state);
     return(
       <div>
-        <p>{this.state.current_question.content}</p>
-        <p>{this.state.current_question.content === "Press enter to start" ? null : this.state.timer}</p>
-        <p>{this.state.current_question.content === "Press enter to start" ? null : <RecordView />}</p>
+        <div>{this.state.current_question.content}</div>
+        <div>{this.state.current_question.content === "Press enter to start" ? null : this.state.timer}</div>
+        <div>{this.state.current_question.content === "Press enter to start" ? null : <RecordView />}</div>
       </div>
     )
   }
